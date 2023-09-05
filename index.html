@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTW App Template</title>
+    <!--
+        The tailwind CDN is designed for development purposes only, and is not the best choice for production.
+        Read more here: https://tailwindcss.com/docs/installation 
+    -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="inc/exercises.js"></script>
+    <!-- example for dark theme styling when using tailwind cdn -->
+    <style>
+        /*examples for dark/light themes*/
+        .dark .dark\:text-white {
+            color: #fff;
+        }
+        .dark .dark\:bg-gray {
+            background-color: #031d28;
+        }
+        .light .light\:text-black {
+            color: #000;
+        }
+
+        /*add your custom css rules here*/
+    </style>
+</head>
+
+<body class="dark:text-white light:text-black">
+
+    <!-- your app code goes here -->
+    <div class="my-4 max-w-[400px] mx-auto">
+        <select id="categories" class="border border-[#1285ba] rounded-lg p-2 w-full mb-4 dark:bg-gray dark:text-white"></select>
+        <div id="exercises"></div>
+    </div>
+
+
+    <script>        
+        const $categories = document.getElementById('categories')
+        const $exercises = document.getElementById('exercises')
+
+        const createList = ()=>{
+            $exercises.innerHTML = ''
+            const list = document.createElement('ol')
+            list.classList.add('list-decimal')
+            exercises[$categories.value].topics.forEach((topic)=>{
+                const item = document.createElement('li')
+                item.innerHTML = `<div class="pb-4">
+                        <div class="font-bold">${topic.title}</div>
+                        <div class="text-sm">${topic.description}</div>
+                    </div>`                
+                list.appendChild(item)
+            })
+            $exercises.appendChild(list)
+        }
+
+        Object.entries(exercises).forEach(([k,v],i)=>{
+            const option = document.createElement('option')
+            option.value = k
+            option.innerText = v.title
+            if(i===0) {
+                option.selected = true                
+            }
+            $categories.appendChild(option)                                    
+        })
+        console.log($categories.value)
+        createList()
+        $categories.addEventListener('change', (e)=>{
+                console.log($categories.value)
+                createList()
+            })
+
+        
+    </script>
+
+    <!-- special scripts for integration in MTW gallery - must be placed at the bottom of the HTML after your code -->
+    <script>
+        // custom config for the MTW app 
+        const mtwAppConfig = {
+            border: false // app border in the MTW page                    
+        }
+
+        ///////////////////////////////////////////////////////
+        // implement this functions in order to use private API        
+        const sendPrivateApiRequest = async () => {
+            // your code here:
+            // sendRequestToParent({ cat: 'getAssets' })
+        }        
+
+        const acceptPrivateApiResponse = async (data) => {
+            // process received data here:
+            // console.log(data)
+        }
+
+        // use this in order to send on document load
+        document.addEventListener('DOMContentLoaded', () => {
+            // your code here:
+            //sendRequestToParent({ method: 'getAssets' })
+        })
+
+    </script>
+    <script src="https://morethanwallet.com/appstore/index.js"></script>
+</body>
+
+</html>
